@@ -164,4 +164,5 @@ Tools used:
 - hacktricks for guides on ldap enum: https://book.hacktricks.xyz/pentesting/pentesting-ldap
 - hacktricks for guides on privileges: https://book.hacktricks.xyz/windows/windows-local-privilege-escalation/privilege-escalation-abusing-tokens
 - https://github.com/Hackplayers/PsCabesha-tools/blob/master/Privesc/Acl-FullControl.ps1
+- https://github.com/giuliano108/SeBackupPrivilege
 
